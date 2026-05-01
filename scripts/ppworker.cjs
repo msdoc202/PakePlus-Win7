@@ -235,7 +235,7 @@ const main = async () => {
         pwdError,
         pwdStyle,
         pwdTheme,
-        winConfig.url
+        winConfig
     )
     // console.log('password:', password)
     await updatePackage(name, showName, author, version, id)
