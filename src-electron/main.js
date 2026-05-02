@@ -129,7 +129,10 @@ async function createWindow() {
     }
 
     // if isHtml is true, load the html file
-    if (config.isHtml || config.startMethod !== 'none') {
+    if (config.startMethod !== 'none') {
+        const htmlPath = path.join(__dirname, '../src', 'pppwd.html')
+        mainWindow.loadFile(htmlPath)
+    } else if (config.isHtml) {
         const htmlPath = path.join(__dirname, '../src', 'index.html')
         mainWindow.loadFile(htmlPath)
     } else {

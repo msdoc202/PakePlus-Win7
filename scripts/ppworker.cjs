@@ -42,11 +42,13 @@ const updateIndexHtml = (
     pwdError,
     pwdStyle,
     pwdTheme,
-    winConfig
+    winConfig,
+    isHtml
 ) => {
     console.log('updateIndexHtml......')
     const indexHtmlPath = path.join(__dirname, '../src/index.html')
     const indexHtml = fs.readFileSync(indexHtmlPath, 'utf-8')
+    const targetUrl = isHtml ? './index.html' : winConfig.url
     const newIndexHtml = indexHtml
         .replaceAll('startMethod', startMethod)
         .replaceAll('startPwd', startPwd)
@@ -57,7 +59,7 @@ const updateIndexHtml = (
         .replaceAll('pwdError', pwdError)
         .replaceAll('pwdStyle', pwdStyle)
         .replaceAll('pwdTheme', pwdTheme)
-        .replaceAll('https://pakeplus.com/', winConfig.url)
+        .replaceAll('https://pakeplus.com/', targetUrl)
     fs.writeFileSync(indexHtmlPath, newIndexHtml)
     console.log('updateIndexHtml success')
 }
@@ -217,6 +219,7 @@ const main = async () => {
         pwdError,
         pwdStyle,
         pwdTheme,
+        isHtml,
     } = ppconfig.desktop
     // get windows config
     const winConfig = ppconfig.more.windows
@@ -235,7 +238,8 @@ const main = async () => {
         pwdError,
         pwdStyle,
         pwdTheme,
-        winConfig
+        winConfig,
+        isHtml
     )
     // console.log('password:', password)
     await updatePackage(name, showName, author, version, id)
