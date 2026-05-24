@@ -1,4 +1,4 @@
-const { app, BrowserWindow, shell, Menu } = require('electron')
+const { app, BrowserWindow, shell, Menu, protocol } = require('electron')
 const path = require('path')
 const fs = require('fs')
 const config = require('./config.json')
@@ -133,10 +133,10 @@ async function createWindow() {
     // if isHtml is true, load the html file
     if (config.startMethod !== 'none') {
         const htmlPath = path.join(__dirname, '../src', 'pppwd.html')
-        mainWindow.loadFile(htmlPath)
+        mainWindow.loadURL('pakeplus://app' + htmlPath)
     } else if (config.isHtml) {
         const htmlPath = path.join(__dirname, '../src', 'index.html')
-        mainWindow.loadFile(htmlPath)
+        mainWindow.loadURL('pakeplus://app' + htmlPath)
     } else {
         mainWindow.loadURL(WEBSITE_URL)
     }
@@ -254,6 +254,13 @@ function autoStart() {
 
 // when the application is ready, create the window and the menu
 app.whenReady().then(() => {
+    // Register custom protocol to serve local files
+    // This bypasses macOS 15 file access restrictions on Electron 22 (Chromium 108)
+    protocol.registerFileProtocol('pakeplus', (request, callback) => {
+        const filePath = request.url.replace('pakeplus://app', '')
+        callback({ path: filePath })
+    })
+
     // create the menu
     createMenu()
 
